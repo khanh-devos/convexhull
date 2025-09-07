@@ -46,5 +46,8 @@ std::vector<Point> quickHull(std::vector<Point> pts) {
     quickHullRec(pts, A, B, hull); // Upper side
     quickHullRec(pts, B, A, hull); // Lower side
 
+    //remove the last item A because both Upper & Lower sides have it.
+    if (hull.size() > 0) hull.pop_back(); 
+
     return hull;
 }

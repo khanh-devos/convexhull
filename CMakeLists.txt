@@ -13,10 +13,35 @@ include_directories(include)
 # Find SFML
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
-# Define cpp files
-file(GLOB SOURCES src/*.cpp)
+set(ALGO_SOURCES
+    src/quick_hull.cpp       # algorithm implementation(s)
+    src/draw.cpp
+    src/graham_hull.cpp
+    # add other algorithm .cpp files here, but NOT main.cpp
+)
 
-add_executable(convex_hull ${SOURCES})
+set(MAIN_SOURCE
+    src/main.cpp            # your SFML visualization entry point
+)
 
-# Link with SFML
-target_link_libraries(convex_hull PRIVATE sfml-graphics sfml-window sfml-system)
+# ---- Library with algorithms (no main) ----
+add_library(convexhull_lib ${ALGO_SOURCES})
+target_include_directories(convexhull_lib PUBLIC include)
+
+# ---- Main demo executable ----
+add_executable(convex_hull ${MAIN_SOURCE})
+target_link_libraries(convex_hull PRIVATE convexhull_lib sfml-graphics sfml-window sfml-system)
+
+# ---- Google Test ----
+
+enable_testing()
+find_package(GTest REQUIRED)
+
+# Unit tests
+file(GLOB TEST_SOURCES tests/*.cpp)
+add_executable(unit_tests ${TEST_SOURCES})
+
+target_link_libraries(unit_tests PRIVATE convexhull_lib GTest::GTest GTest::Main)
+
+include(GoogleTest)
+add_test(NAME unit_tests COMMAND unit_tests)
