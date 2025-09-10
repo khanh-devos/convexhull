@@ -5,10 +5,14 @@
 #include <cmath>
 #include <algorithm>
 
+// EPS tolerance for floating-point comparisons
+const double EPS = 1e-9;
+
 struct Point {
     double x, y;
     bool operator==(const Point& other) const {
-        return x == other.x && y == other.y;
+        return std::fabs(x - other.x) < EPS &&
+               std::fabs(y - other.y) < EPS;
     }
 };
 
@@ -19,8 +23,9 @@ inline double cross(const Point& O, const Point& A, const Point& B) {
 
 // Distance from point P to line AB
 inline double distance(const Point& A, const Point& B, const Point& P) {
-    return std::fabs(cross(A, B, P)) /
-           std::sqrt((B.x - A.x)*(B.x - A.x) + (B.y - A.y)*(B.y - A.y));
+    double area = std::fabs(cross(A, B, P));
+    double base = std::hypot(B.x - A.x, B.y - A.y);
+    return area / (base + EPS);     // add EPS to avoid div/0
 }
 
 // double x1 = 0.1 + 0.2;  // 0.3 expected, but it's not

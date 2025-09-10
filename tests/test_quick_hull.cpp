@@ -45,7 +45,9 @@ TEST(QuickHullTest, CollinearCase) {
 }
 
 TEST(QuickHullTest, ConcaveCase) {
-    std::vector<Point> pts = { {0,0}, {4,0}, {4,1}, {2.5,1.5}, {2,2}, {4,2}, {4.0,4.0}, {0,4} };
+    std::vector<Point> pts = { 
+        {0,0}, {0,0}, {4,0}, {4,0}, {4,1}, {2.5,1.5}, {2,2}, {4,2}, {4.0,4.0}, {0,4} 
+    };
 
     auto hull = quickHull(pts);
 
